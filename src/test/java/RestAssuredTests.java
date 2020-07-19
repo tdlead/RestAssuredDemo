@@ -27,14 +27,10 @@ public class RestAssuredTests {
 
     @Test
     public void postBody() {
-        Map<String, Object> jsonAsMap = new HashMap<>();
-        jsonAsMap.put("userId", 1);
-        jsonAsMap.put("title", "TaniushaMaladet");
-        jsonAsMap.put("body", "sexy body");
-
+        PostDetails postDetails=new PostDetails("1","Stefan Krasavcik","sexy body");
         given().
                 contentType(ContentType.JSON).
-                body(jsonAsMap).
+                body(postDetails).
                 when().
                 post(baseUrl).
                 then().
@@ -43,14 +39,11 @@ public class RestAssuredTests {
 
     @Test
     public void putBody() {
-        Map<String, Object> jsonAsMap = new HashMap<>();
-        jsonAsMap.put("userId", 2);
-        jsonAsMap.put("title", "PutMethod");
-        jsonAsMap.put("body", "sexy body");
+        PostDetails postDetails=new PostDetails("1","PutMethod","sexy body");
 
         given().
                 contentType(ContentType.JSON).
-                body(jsonAsMap).
+                body(postDetails).
                 when().
                 put(baseUrl + "1").
                 then().
@@ -64,14 +57,18 @@ public class RestAssuredTests {
 
     @Test
     public void validateList() {
-        List<User> userList = given()
+        List<PostDetails> postDetailsList = given()
                 .when()
                 .get(baseUrl)
                 .then()
                 .extract()
                 .body()
-                .jsonPath().getList(".", User.class);
-        Assert.assertEquals(100, userList.size());
-        Assert.assertTrue(userList.stream().anyMatch(x -> x.getId() != null && x.getTitle() != null));
+                .jsonPath().getList(".", PostDetails.class);
+        Assert.assertEquals(100, postDetailsList.size());
+        postDetailsList.forEach(this::checkUserIdAndTitleForPost);
+    }
+
+    private void checkUserIdAndTitleForPost(PostDetails postDetails){
+        Assert.assertTrue(postDetails.getId() !=null || postDetails.getTitle()!=null);
     }
 }

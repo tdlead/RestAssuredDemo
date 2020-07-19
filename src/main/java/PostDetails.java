@@ -1,8 +1,17 @@
-public class User {
+public class PostDetails {
     private String userId;
     private String id;
     private String title;
     private String body;
+
+    public PostDetails() {
+    }
+
+    public PostDetails(String userId, String title, String body) {
+        this.userId = userId;
+        this.title = title;
+        this.body = body;
+    }
 
     public String getUserId() {
         return userId;
